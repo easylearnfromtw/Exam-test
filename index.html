@@ -1,0 +1,872 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="輸入學測六科級分，立刻對照 115 學測五標與熱門校系申請入學一階門檻。">
+<!-- LINE / Facebook 分享縮圖：網址已設成 GitHub Pages 的 980510linz.github.io/gsat，換網址時改下面兩行 -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://easylearnfromtw.github.io/Exam-test/">
+<meta property="og:title" content="學測落點速查">
+<meta property="og:description" content="輸入學測級分，立刻看五標位置和熱門校系一階門檻">
+<meta property="og:image" content="https://easylearnfromtw.github.io/Exam-test/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="600">
+<meta name="twitter:card" content="summary_large_image">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}img{max-width:100%}</style>
+<title>學測落點速查</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Noto+Sans+TC:wght@400;500;700;900&display=swap">
+<style>
+/* Layout：上方一張競選海報式的放射光芒頭版（粗黑標題＋即時總級分票根），下方是不透明的紙面卡片；
+   玻璃只用在頂欄、底部分頁列、分段控制、滑桿把手與放大鏡這些控制層 */
+:root{
+  --paper:#ebe4d2;
+  --sheet:#fbf7ec;
+  --ink:#14271c;
+  --ink-2:#4d5c51;
+  --green:#16603c;
+  --orange:#ec661c;
+  --yellow:#f5cc1f;
+  --line:rgba(20,39,28,.13);
+  --ray-a:#17603c;
+  --ray-b:#ec661c;
+  --poster-ink:#f7f2e6;
+  --on-green:#f7f2e6;
+  --on-accent:#14271c;
+  --ok:#19794a;
+  --ok-bg:rgba(25,121,74,.12);
+  --near:#b9560c;
+  --near-bg:rgba(236,102,28,.14);
+  --far:#7b847c;
+  --far-bg:rgba(20,39,28,.07);
+  --seg-bg:rgba(20,39,28,.06);
+  --track:rgba(20,39,28,.12);
+  --spot:rgba(236,102,28,.10);
+  --glass-bg:rgba(251,247,236,.5);
+  --glass-edge:rgba(255,255,255,.72);
+  --glass-hi:rgba(255,255,255,.9);
+  --glass-lo:rgba(255,255,255,.22);
+  --glass-shadow:rgba(20,39,28,.3);
+  --cap-bg:rgba(255,255,255,.66);
+  --font-display:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+  --font-num:"Anton","Impact","Arial Narrow Bold",sans-serif;
+  --font-body:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0d1b14;--sheet:#15281e;--ink:#eee8da;--ink-2:#a6b1a5;--green:#3a9a66;--orange:#f07a35;--yellow:#f2cf3c;
+    --line:rgba(238,232,218,.12);--ray-a:#0f4a2d;--ray-b:#c4551a;--poster-ink:#f7f2e6;--on-green:#0d1b14;--on-accent:#14271c;
+    --ok:#52c48c;--ok-bg:rgba(82,196,140,.14);--near:#f5a062;--near-bg:rgba(245,160,98,.15);--far:#8e998f;--far-bg:rgba(238,232,218,.07);
+    --seg-bg:rgba(238,232,218,.07);--track:rgba(238,232,218,.15);--spot:rgba(240,122,53,.13);
+    --glass-bg:rgba(21,40,30,.52);--glass-edge:rgba(255,255,255,.16);--glass-hi:rgba(255,255,255,.3);--glass-lo:rgba(255,255,255,.06);
+    --glass-shadow:rgba(0,0,0,.55);--cap-bg:rgba(255,255,255,.16);color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0d1b14;--sheet:#15281e;--ink:#eee8da;--ink-2:#a6b1a5;--green:#3a9a66;--orange:#f07a35;--yellow:#f2cf3c;
+  --line:rgba(238,232,218,.12);--ray-a:#0f4a2d;--ray-b:#c4551a;--poster-ink:#f7f2e6;--on-green:#0d1b14;--on-accent:#14271c;
+  --ok:#52c48c;--ok-bg:rgba(82,196,140,.14);--near:#f5a062;--near-bg:rgba(245,160,98,.15);--far:#8e998f;--far-bg:rgba(238,232,218,.07);
+  --seg-bg:rgba(238,232,218,.07);--track:rgba(238,232,218,.15);--spot:rgba(240,122,53,.13);
+  --glass-bg:rgba(21,40,30,.52);--glass-edge:rgba(255,255,255,.16);--glass-hi:rgba(255,255,255,.3);--glass-lo:rgba(255,255,255,.06);
+  --glass-shadow:rgba(0,0,0,.55);--cap-bg:rgba(255,255,255,.16);color-scheme:dark;
+}
+
+[hidden]{display:none!important}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-body);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent;overflow-x:hidden}
+button{font:inherit;color:inherit;cursor:pointer}
+a{color:var(--green)}
+:focus-visible{outline:3px solid var(--orange);outline-offset:2px}
+.num{font-family:var(--font-num);font-weight:400;font-variant-numeric:tabular-nums;letter-spacing:.01em}
+h2{font-family:var(--font-display);font-weight:900;font-size:20px;line-height:1.3;margin:0;letter-spacing:.02em;text-wrap:balance}
+h3{margin:0}
+
+/* ---------- glass control layer ---------- */
+.glass{
+  background:var(--glass-bg);
+  -webkit-backdrop-filter:blur(20px) saturate(180%);
+  backdrop-filter:blur(20px) saturate(180%);
+  border:1px solid var(--glass-edge);
+  box-shadow:inset 0 1px 0 var(--glass-hi),inset 0 -1px 0 var(--glass-lo),inset 0 0 22px var(--glass-lo),0 14px 34px -14px var(--glass-shadow);
+}
+.topbar{position:fixed;top:0;left:0;right:0;z-index:40;padding-top:env(safe-area-inset-top,0px);display:flex;justify-content:center;pointer-events:none}
+.topbar-in{pointer-events:auto;margin:8px 12px 0;width:min(640px,calc(100% - 24px));height:52px;border-radius:26px;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:0 6px 0 8px}
+.brand{display:flex;align-items:center;gap:9px;min-width:0}
+.brand-mark{width:32px;height:32px;flex:none;border-radius:9px;display:grid;place-items:center;background:var(--orange);color:var(--on-accent);font-family:var(--font-display);font-weight:900;font-size:18px;transform:rotate(-5deg);box-shadow:inset 0 -2px 0 rgba(0,0,0,.12)}
+.brand b{font-family:var(--font-display);font-weight:900;font-size:16px;letter-spacing:.04em;white-space:nowrap}
+.brand .num{font-size:13px;color:var(--ink-2);padding-top:1px}
+.glass-btn{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;border:1px solid var(--glass-edge);background:var(--cap-bg);box-shadow:inset 0 1px 0 var(--glass-hi),0 4px 12px -6px var(--glass-shadow);transition:transform .25s cubic-bezier(.3,1.6,.5,1),background .2s}
+.glass-btn:active{transform:scale(1.14)}
+.glass-btn svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
+.glass-btn[aria-pressed="true"]{background:var(--orange);color:var(--on-accent);border-color:transparent}
+
+/* shared capsule (tab bar + segmented controls) */
+.capsule-root{position:relative;user-select:none;-webkit-user-select:none}
+.seg-item{position:relative;z-index:1;border:0;background:none;display:flex;align-items:center;justify-content:center;min-width:0}
+.cap{position:absolute;left:0;z-index:2;pointer-events:none;overflow:hidden;background:var(--cap-bg);border:1px solid var(--glass-edge);
+  box-shadow:inset 0 1px 0 var(--glass-hi),inset 0 -1px 2px var(--glass-lo),0 6px 16px -6px var(--glass-shadow);
+  -webkit-backdrop-filter:blur(6px) saturate(170%);backdrop-filter:blur(6px) saturate(170%);will-change:transform}
+.cap-strip{position:absolute;left:-1px;top:-1px;height:100%}
+.cap-clone{position:absolute;display:flex;align-items:center;justify-content:center;color:var(--green);transform:scale(1.07)}
+
+.tabbar-wrap{position:fixed;left:0;right:0;bottom:0;z-index:40;display:flex;justify-content:center;padding-bottom:calc(12px + env(safe-area-inset-bottom,0px));pointer-events:none}
+.tabbar{pointer-events:auto;display:grid;grid-template-columns:repeat(4,1fr);width:min(372px,calc(100% - 32px));height:64px;padding:5px;border-radius:32px;touch-action:none;transform-origin:50% 100%;transition:transform .4s cubic-bezier(.3,1.45,.5,1)}
+.tabbar.compact{transform:scale(.84) translateY(6px)}
+.tabbar .seg-item{flex-direction:column;gap:1px;font-size:11px;font-weight:700;color:var(--ink-2);border-radius:27px;letter-spacing:.06em}
+.tabbar .cap{top:5px;bottom:5px;border-radius:27px}
+.tabbar .cap-clone{flex-direction:column;gap:1px;font-size:11px;font-weight:700;letter-spacing:.06em}
+.tabbar svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+
+.seg{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;height:40px;padding:4px;border-radius:999px;background:var(--seg-bg);border:1px solid var(--line);box-shadow:inset 0 1px 3px var(--track);touch-action:pan-y}
+.seg .seg-item{font-size:13px;font-weight:700;color:var(--ink-2);padding:0 14px;white-space:nowrap;border-radius:999px}
+.seg .cap{top:4px;bottom:4px;border-radius:999px}
+.seg .cap-clone{font-size:13px;font-weight:700;white-space:nowrap}
+
+/* ---------- page ---------- */
+.wrap{max-width:640px;margin:0 auto;padding-inline:16px;padding-block:76px 132px}
+.view{display:flex;flex-direction:column;gap:14px}
+.view.enter{animation:blurFade .5s cubic-bezier(.2,.8,.2,1)}
+@keyframes blurFade{from{opacity:0;filter:blur(10px);transform:translateY(10px)}to{opacity:1;filter:none;transform:none}}
+
+.poster{position:relative;overflow:hidden;isolation:isolate;border-radius:24px;padding:20px 18px 16px;color:var(--poster-ink);
+  background:repeating-conic-gradient(from -4deg at 8% 112%,var(--ray-a) 0deg 8deg,var(--ray-b) 8deg 16deg)}
+.poster::after{content:"";position:absolute;inset:0;z-index:-1;opacity:.35;mix-blend-mode:multiply;pointer-events:none;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .1  0 0 0 0 .1  0 0 0 0 .08  0 0 0 .55 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+.poster-tag{display:inline-block;background:var(--yellow);color:var(--on-accent);font-weight:900;font-size:12px;letter-spacing:.12em;padding:3px 10px;border-radius:4px;transform:rotate(-2deg)}
+.poster h1{margin:12px 0 0;font-family:var(--font-display);font-weight:900;line-height:1.05;letter-spacing:.02em;text-shadow:0 3px 0 rgba(0,0,0,.16)}
+.poster h1 .l1{display:block;font-size:clamp(36px,10vw,52px)}
+.poster h1 .l2{display:inline-block;margin-top:8px;font-size:clamp(54px,16vw,84px);color:var(--yellow);background:var(--ray-a);padding:2px 16px 6px 12px;transform:rotate(-4deg) skewX(-6deg);transform-origin:left center;box-shadow:6px 6px 0 rgba(0,0,0,.18)}
+.poster p{margin:14px 0 0;font-size:13px;font-weight:500;max-width:30em;text-shadow:0 1px 2px rgba(0,0,0,.35)}
+.ticket{margin-top:16px;display:flex;align-items:center;gap:14px;background:var(--sheet);color:var(--ink);border-radius:16px;padding:10px 14px;box-shadow:0 8px 0 -4px rgba(0,0,0,.18)}
+.ticket-num{display:flex;align-items:baseline;gap:2px;flex:none}
+.ticket-num .big{font-size:52px;line-height:1;color:var(--green)}
+.ticket-num .of{font-family:var(--font-num);font-size:18px;color:var(--ink-2)}
+.ticket-txt{display:flex;flex-direction:column;gap:4px;min-width:0}
+.ticket-txt b{font-size:14px;letter-spacing:.06em}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.mini{font-size:12px;font-weight:700;padding:1px 9px;border-radius:999px;white-space:nowrap}
+.mini.ok{background:var(--ok-bg);color:var(--ok)}
+.mini.near{background:var(--near-bg);color:var(--near)}
+.mini.far{background:var(--far-bg);color:var(--ink-2)}
+
+.sheet{background:var(--sheet);border:1px solid var(--line);border-radius:20px;padding:16px}
+.sheet-head{display:flex;align-items:center;justify-content:space-between;gap:10px 12px;flex-wrap:wrap}
+.example-note{margin:12px 0 0;font-size:13px;font-weight:500;color:var(--near);background:var(--near-bg);border-radius:10px;padding:6px 10px}
+.subjects{display:flex;flex-direction:column;gap:6px;margin-top:10px}
+.subj{padding:8px 0 4px;border-top:1px solid var(--line)}
+.subj:first-child{border-top:0}
+.subj-top{display:flex;align-items:center;gap:8px}
+.subj-name{font-weight:700;font-size:16px;letter-spacing:.04em}
+.lvl{font-size:11px;font-weight:700;padding:1px 8px;border-radius:999px;white-space:nowrap}
+.lvl[data-l="0"]{background:var(--green);color:var(--on-green)}
+.lvl[data-l="1"]{background:var(--ok-bg);color:var(--ok)}
+.lvl[data-l="2"]{background:var(--far-bg);color:var(--ink)}
+.lvl[data-l="3"],.lvl[data-l="4"]{background:var(--far-bg);color:var(--ink-2)}
+.lvl[data-l="5"]{color:var(--far);padding-left:0}
+.skip{margin-left:auto;font-size:12px;font-weight:700;border:1px solid var(--line);background:none;color:var(--ink-2);border-radius:999px;padding:2px 10px}
+.skip[aria-pressed="true"]{background:var(--ink);color:var(--sheet);border-color:var(--ink)}
+.subj-val{font-size:30px;line-height:1;min-width:2ch;text-align:right;color:var(--ink)}
+.subj.off .subj-val{color:var(--far)}
+.subj.off .range-wrap{opacity:.35}
+.range-wrap{position:relative;padding-bottom:16px}
+.range-wrap input{display:block}
+.ticks{position:absolute;left:0;right:0;bottom:0;height:14px;pointer-events:none}
+.ticks span{position:absolute;bottom:0;transform:translateX(-50%);font-size:10px;line-height:1;color:var(--ink-2);font-weight:500}
+.ticks span::before{content:"";position:absolute;left:50%;bottom:12px;width:1px;height:5px;background:var(--ink-2);opacity:.5}
+
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:38px;margin:0;background:transparent;--fill:0%}
+input[type=range]::-webkit-slider-runnable-track{height:10px;border-radius:5px;background:linear-gradient(to right,var(--green) 0 var(--fill),var(--track) var(--fill) 100%)}
+input[type=range]::-moz-range-track{height:10px;border-radius:5px;background:var(--track)}
+input[type=range]::-moz-range-progress{height:10px;border-radius:5px;background:var(--green)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:30px;height:30px;margin-top:-10px;border-radius:50%;border:1px solid var(--glass-edge);
+  background:radial-gradient(circle at 35% 30%,var(--glass-hi),var(--cap-bg) 60%);box-shadow:inset 0 1px 0 var(--glass-hi),inset 0 -2px 4px var(--glass-lo),0 4px 12px -2px var(--glass-shadow);
+  -webkit-backdrop-filter:blur(4px);transition:transform .25s cubic-bezier(.3,1.6,.5,1)}
+input[type=range]::-moz-range-thumb{width:28px;height:28px;border-radius:50%;border:1px solid var(--glass-edge);background:radial-gradient(circle at 35% 30%,var(--glass-hi),var(--cap-bg) 60%);box-shadow:inset 0 1px 0 var(--glass-hi),0 4px 12px -2px var(--glass-shadow);transition:transform .25s cubic-bezier(.3,1.6,.5,1)}
+input[type=range]:active::-webkit-slider-thumb{transform:scale(1.28)}
+input[type=range]:active::-moz-range-thumb{transform:scale(1.28)}
+input[type=range]:disabled{cursor:not-allowed}
+.sheet-foot{display:flex;justify-content:flex-end;margin-top:8px}
+.text-btn{background:none;border:0;color:var(--ink-2);font-size:13px;font-weight:500;text-decoration:underline;text-underline-offset:3px;padding:4px 2px}
+
+.combos{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;margin-top:12px}
+.combo-tile{background:var(--far-bg);border-radius:12px;padding:8px 12px;display:flex;flex-direction:column}
+.combo-tile span{font-size:12px;font-weight:700;color:var(--ink-2);letter-spacing:.06em}
+.combo-tile .num{font-size:30px;line-height:1.1}
+.combo-tile .num small{font-size:14px;color:var(--ink-2)}
+.combo-tile.primary{background:var(--ok-bg)}
+.combo-tile.primary span{color:var(--ok)}
+
+.cta{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;border:0;border-radius:16px;padding:14px;background:var(--orange);color:var(--on-accent);font-family:var(--font-display);font-weight:900;font-size:17px;letter-spacing:.06em;box-shadow:0 6px 0 -2px var(--ray-a);transition:transform .2s}
+.cta:active{transform:translateY(3px);box-shadow:0 3px 0 -2px var(--ray-a)}
+
+.view-head p{margin:4px 0 0;color:var(--ink-2);font-size:14px}
+.group-label{display:flex;align-items:center;gap:8px;margin:6px 2px -4px;font-size:13px;font-weight:700;color:var(--ink-2);letter-spacing:.08em}
+.group-label .num{font-size:15px}
+.cards{display:flex;flex-direction:column;gap:10px}
+.spot{position:relative;overflow:hidden}
+.spot::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .3s;background:radial-gradient(240px circle at var(--mx,-300px) var(--my,-300px),var(--spot),transparent 70%)}
+.spot:hover::before{opacity:1}
+.rc{background:var(--sheet);border:1px solid var(--line);border-radius:18px;padding:14px 14px 12px;display:flex;flex-direction:column;gap:8px}
+.rc-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.rc-top h3{font-size:16px;font-weight:700;letter-spacing:.03em;line-height:1.4;min-width:0}
+.st{font-size:12px;font-weight:700;padding:3px 10px;border-radius:999px;white-space:nowrap;flex:none}
+.st.met{background:var(--ok);color:var(--on-green)}
+.st.near{background:var(--near-bg);color:var(--near)}
+.st.far,.st.miss{background:var(--far-bg);color:var(--ink-2)}
+.rc-meta{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.combo{font-weight:700;font-size:12px;background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:0 7px;letter-spacing:.04em}
+.kind{font-size:11px;font-weight:700;border:1px solid currentColor;border-radius:6px;padding:0 6px}
+.k-real{color:var(--green)}
+.k-est{color:var(--near)}
+.k-past{color:var(--ink-2)}
+.bar{position:relative;height:8px;border-radius:4px;background:var(--track);margin:6px 0 2px}
+.bar i{position:absolute;left:0;top:0;bottom:0;border-radius:4px;background:var(--far)}
+.rc[data-s="met"] .bar i{background:var(--ok)}
+.rc[data-s="near"] .bar i{background:var(--orange)}
+.bar b{position:absolute;top:-5px;bottom:-5px;width:3px;margin-left:-1.5px;border-radius:2px;background:var(--ink)}
+.rc-nums{display:flex;align-items:baseline;gap:14px;font-size:12px;color:var(--ink-2);font-weight:500}
+.rc-nums .num{font-size:22px;color:var(--ink);margin-left:3px}
+.rc-nums .gap{margin-left:auto;font-weight:700}
+.rc[data-s="met"] .gap{color:var(--ok)}
+.rc[data-s="near"] .gap{color:var(--near)}
+.rc-note{margin:0;font-size:12px;color:var(--ink-2)}
+.fine{font-size:12px;color:var(--ink-2);margin:4px 2px 0}
+
+.tbl-wrap{overflow-x:auto;margin-top:12px}
+.std-tbl{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums;font-size:14px}
+.std-tbl th,.std-tbl td{text-align:center;padding:7px 4px;border-bottom:1px solid var(--line);white-space:nowrap}
+.std-tbl th{font-size:12px;color:var(--ink-2);font-weight:700;letter-spacing:.06em}
+.std-tbl td:first-child,.std-tbl th:first-child{text-align:left;font-weight:700}
+.std-tbl td.hit{background:var(--ok-bg);color:var(--ok);font-weight:900;border-radius:6px}
+.std-tbl td.you{font-family:var(--font-num);font-size:17px}
+.std-list{display:flex;flex-direction:column;gap:10px}
+.std-row{background:var(--sheet);border:1px solid var(--line);border-radius:18px;padding:12px 14px}
+.std-head{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.std-head b{font-size:16px;letter-spacing:.04em}
+.std-head .num{font-size:24px;line-height:1}
+.std-msg{font-size:13px;color:var(--ink-2);font-weight:500}
+.std-row.off{opacity:.55}
+.scale{position:relative;height:40px;margin:6px 10px 0}
+.scale-track{position:absolute;left:0;right:0;bottom:8px;height:6px;border-radius:3px;background:var(--track)}
+.scale .tk{position:absolute;top:0;transform:translateX(-50%);font-size:11px;font-weight:700;color:var(--ink-2);line-height:1}
+.scale .tk::after{content:"";position:absolute;left:50%;top:15px;width:2px;height:12px;margin-left:-1px;background:var(--ink-2);opacity:.45;border-radius:1px}
+.scale .mk{position:absolute;bottom:3px;width:16px;height:16px;margin-left:-8px;border-radius:50%;background:var(--orange);border:3px solid var(--sheet);box-shadow:0 0 0 1px var(--orange)}
+
+.prose{display:flex;flex-direction:column;gap:10px}
+.prose p{margin:0;max-width:38em}
+.prose ul{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:6px}
+.prose li{font-size:14px}
+.prose small{color:var(--ink-2)}
+.link-row{display:flex;flex-wrap:wrap;gap:8px}
+.link-btn{display:inline-flex;align-items:center;gap:6px;text-decoration:none;font-weight:700;font-size:14px;color:var(--ink);background:var(--far-bg);border:1px solid var(--line);border-radius:999px;padding:7px 14px}
+.def{display:grid;grid-template-columns:auto 1fr;gap:6px 12px;margin:0;font-size:14px}
+.def dt{font-weight:700}
+.def dd{margin:0;color:var(--ink-2)}
+
+/* ---------- lens ---------- */
+.lens{position:fixed;left:0;top:0;z-index:60;width:132px;height:132px;border-radius:50%;touch-action:none;cursor:grab;transition:scale .25s cubic-bezier(.3,1.6,.5,1)}
+.lens.drag{cursor:grabbing;scale:1.08}
+.lens-view{position:absolute;inset:0;border-radius:50%;overflow:hidden;background:var(--paper);filter:url(#lensRefract)}
+.lens-content{position:absolute;inset:0;pointer-events:none}
+.lens-rim{position:absolute;inset:0;border-radius:50%;pointer-events:none;
+  background:radial-gradient(circle at 30% 24%,var(--glass-hi),transparent 30%),radial-gradient(circle at 70% 82%,var(--glass-lo),transparent 40%);
+  box-shadow:inset 0 0 0 1px var(--glass-edge),inset 0 3px 6px var(--glass-hi),inset 0 -8px 16px var(--glass-shadow),0 16px 34px -10px var(--glass-shadow)}
+.lens-hint{position:absolute;left:50%;bottom:-26px;transform:translateX(-50%);font-size:11px;font-weight:700;color:var(--ink-2);white-space:nowrap;pointer-events:none}
+
+@media (prefers-reduced-motion: reduce){
+  .view.enter{animation:none}
+  .tabbar,.glass-btn,.lens,input[type=range]::-webkit-slider-thumb{transition:none}
+}
+@media (min-width:560px){
+  .poster{padding:26px 26px 20px}
+  .poster p{font-size:14px}
+}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-in glass">
+    <div class="brand"><span class="brand-mark">落</span><b>學測落點速查</b><span class="num">115</span></div>
+    <button class="glass-btn" id="lensBtn" type="button" aria-pressed="false" aria-label="放大鏡">
+      <svg viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6"/><path d="M15 15l5 5"/></svg>
+    </button>
+  </div>
+</header>
+
+<main class="wrap" id="main">
+
+  <section class="view" id="v-score" data-view="score">
+    <div class="poster">
+      <span class="poster-tag">115 學測 · 一階門檻對照</span>
+      <h1><span class="l1">你的級分</span><span class="l2">能上哪</span></h1>
+      <p>拉動六科級分，馬上對照大考中心五標，看看熱門校系的申請入學一階門檻你過了幾個。</p>
+      <div class="ticket">
+        <div class="ticket-num"><span class="num big" id="heroTotal">0</span><span class="of">/60</span></div>
+        <div class="ticket-txt"><b id="heroLabel">國英數A自</b><div class="chips" id="heroChips"></div></div>
+      </div>
+    </div>
+
+    <div class="sheet">
+      <div class="sheet-head">
+        <h2>各科級分</h2>
+        <div class="seg capsule-root" id="segGroup" role="radiogroup" aria-label="組別">
+          <span class="cap" aria-hidden="true"><span class="cap-strip"></span></span>
+          <button class="seg-item" type="button" role="radio" data-v="sci">自然組</button>
+          <button class="seg-item" type="button" role="radio" data-v="soc">社會組</button>
+        </div>
+      </div>
+      <p class="example-note" id="exampleNote">目前是範例分數，拖動滑桿換成你的級分。</p>
+      <div class="subjects" id="subjects"></div>
+      <div class="sheet-foot"><button class="text-btn" type="button" id="resetBtn">回到範例分數</button></div>
+    </div>
+
+    <div class="sheet">
+      <h2>常用組合總級分</h2>
+      <div class="combos" id="combos"></div>
+    </div>
+
+    <button class="cta" type="button" id="goResult">看我過了哪些校系 <span aria-hidden="true">→</span></button>
+  </section>
+
+  <section class="view" id="v-result" data-view="result" hidden>
+    <div class="view-head">
+      <h2>落點對照</h2>
+      <p>拿你的級分和 115 學年度申請入學一階門檻比較。差 1 到 2 級分算「差一點」。</p>
+    </div>
+    <div class="seg capsule-root" id="segFilter" role="radiogroup" aria-label="篩選組別">
+      <span class="cap" aria-hidden="true"><span class="cap-strip"></span></span>
+      <button class="seg-item" type="button" role="radio" data-v="all">全部</button>
+      <button class="seg-item" type="button" role="radio" data-v="sci">自然組</button>
+      <button class="seg-item" type="button" role="radio" data-v="soc">社會組</button>
+    </div>
+    <div class="cards" id="resCards"></div>
+    <p class="fine">一階只是通過第一階段篩選，最後錄取還要看二階的備審和面試。</p>
+  </section>
+
+  <section class="view" id="v-std" data-view="std" hidden>
+    <div class="view-head">
+      <h2>115 學測五標</h2>
+      <p>大考中心公布的成績標準。綠色格子是你各科達到的那一標。</p>
+    </div>
+    <div class="sheet">
+      <div class="tbl-wrap" style="margin-top:0">
+        <table class="std-tbl" id="stdTable"></table>
+      </div>
+    </div>
+    <div class="std-list" id="stdList"></div>
+  </section>
+
+  <section class="view" id="v-about" data-view="about" hidden>
+    <div class="view-head">
+      <h2>資料說明</h2>
+      <p>整理日期：2026 年 10 月。116 學測在 2027 年 1 月，採計科目和門檻每年都會變，請以官方公告為準。</p>
+    </div>
+    <div class="sheet prose">
+      <h2 style="font-size:17px">門檻的三種來源</h2>
+      <dl class="def">
+        <dt class="k-real">115 一階實際</dt><dd>115 學年度申請入學第一階段通過的最低級分，來自放榜報導。</dd>
+        <dt class="k-est">補教預估</dt><dd>補習班在 115 學測考後與成績公布時的估計，不是官方數字。</dd>
+        <dt class="k-past">往年實際</dt><dd>前幾年的門檻，給你參考趨勢。</dd>
+      </dl>
+    </div>
+    <div class="sheet prose">
+      <h2 style="font-size:17px">五標怎麼看</h2>
+      <p>頂標、前標、均標、後標、底標分別是全體到考生的第 88、75、50、25、12 百分位。達到前標，大約就在全國前 25%。</p>
+    </div>
+    <div class="sheet prose">
+      <h2 style="font-size:17px">想查其他校系</h2>
+      <p>這裡只放熱門校系和學校整體參考。其他校系的採計科目、篩選倍率和歷年結果，請到官方網站查。</p>
+      <div class="link-row">
+        <a class="link-btn" href="https://www.cac.edu.tw/" target="_blank" rel="noopener">大學甄選入學委員會 ↗</a>
+        <a class="link-btn" href="https://www.ceec.edu.tw/" target="_blank" rel="noopener">大學入學考試中心 ↗</a>
+      </div>
+    </div>
+    <div class="sheet prose">
+      <h2 style="font-size:17px">資料出處</h2>
+      <ul id="srcList"></ul>
+    </div>
+  </section>
+</main>
+
+<div class="tabbar-wrap">
+  <nav class="tabbar glass capsule-root" id="tabbar" role="tablist" aria-label="分頁">
+    <span class="cap" aria-hidden="true"><span class="cap-strip"></span></span>
+    <button class="seg-item" type="button" role="tab" data-v="score"><svg viewBox="0 0 24 24"><path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2.2"/><circle cx="9" cy="17" r="2.2"/></svg><span>分數</span></button>
+    <button class="seg-item" type="button" role="tab" data-v="result"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1" fill="currentColor"/></svg><span>落點</span></button>
+    <button class="seg-item" type="button" role="tab" data-v="std"><svg viewBox="0 0 24 24"><path d="M5 20v-7M10 20V5M15 20v-9M20 20V8"/></svg><span>五標</span></button>
+    <button class="seg-item" type="button" role="tab" data-v="about"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 11v6M12 7.6v.2"/></svg><span>說明</span></button>
+  </nav>
+</div>
+
+<div class="lens" id="lens" hidden aria-hidden="true">
+  <div class="lens-view"><div class="lens-content"></div></div>
+  <div class="lens-rim"></div>
+  <span class="lens-hint">拖曳放大鏡</span>
+</div>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <filter id="lensRefract" filterUnits="userSpaceOnUse" x="0" y="0" width="132" height="132" color-interpolation-filters="sRGB">
+    <feImage id="lensMap" x="0" y="0" width="132" height="132" preserveAspectRatio="none" result="map"/>
+    <feDisplacementMap in="SourceGraphic" in2="map" scale="34" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+</svg>
+
+<script>
+(() => {
+  'use strict';
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let lensOn = false, lx = 0, ly = 0, cloneEl = null, dirtyT = 0;
+
+  /* ---------- data ---------- */
+  const SUBJ = [
+    {k:'ch', n:'國文', s:'國'}, {k:'en', n:'英文', s:'英'}, {k:'ma', n:'數學A', s:'數A'},
+    {k:'mb', n:'數學B', s:'數B'}, {k:'so', n:'社會', s:'社'}, {k:'sc', n:'自然', s:'自'}
+  ];
+  const SN = Object.fromEntries(SUBJ.map(s => [s.k, s]));
+  // 115 學測五標：頂、前、均、後、底（大考中心 2026-02-25 公布）
+  const STD = {ch:[13,12,10,9,7], en:[13,11,8,5,3], ma:[12,10,8,5,4], mb:[11,9,5,3,2], so:[13,12,10,8,7], sc:[13,12,9,7,5]};
+  const STD_NAME = ['頂標','前標','均標','後標','底標'];
+  const STD_SHORT = ['頂','前','均','後','底'];
+  const STD_TOP = [12,25,50,75,88];
+  const KIND = {real:['115 一階實際','k-real'], est:['補教預估','k-est'], past:['往年實際','k-past']};
+  const SRC = {
+    s1:{t:'學測成績公告五標一次看', o:'聯合報', d:'2026-02-25', u:'https://udn.com/news/story/6925/9343016'},
+    s2:{t:'學測公布 補教估台大醫、牙59級分', o:'聯合報', d:'2026-02-26', u:'https://udn.com/news/story/6925/9345226'},
+    s3:{t:'115年學測落點 頂大醫科估59級分、電機系43級分起跳', o:'聯合報', d:'2026-01', u:'https://udn.com/news/story/124703/9275751'},
+    s4:{t:'115學測落點補教界這樣估！台大50級分、清交成48級分', o:'1111 產經新聞', d:'2026-01-21', u:'https://www.1111.com.tw/news/jobns/164196'},
+    s5:{t:'台大申請入學一階篩選結果', o:'聯合報', d:'2026-03', u:'https://udn.com/news/story/6925/9413604'}
+  };
+  const FOUR = 'four';
+  const REFS = [
+    {n:'台大醫學系', c:['ch','ma','so','sc'], t:58, kind:'real', g:'sci', note:'今年改採社會、不採英文，比去年低 1 級分', src:'s5'},
+    {n:'台大牙醫系', c:['ch','en','ma','sc'], t:59, kind:'real', g:'sci', src:'s5'},
+    {n:'陽明交大醫學系', c:['ch','en','ma','sc'], t:59, kind:'est', g:'sci', src:'s2'},
+    {n:'自費醫學系', c:['ch','en','ma','sc'], t:56, kind:'est', g:'sci', note:'各校採計科目不同，這裡用國英數A自估算', src:'s2'},
+    {n:'公費醫學系', c:['ch','en','ma','sc'], t:54, kind:'est', g:'sci', note:'名額增加，門檻可能略降', src:'s3'},
+    {n:'台大電機系', c:['en','ma','sc'], t:44, kind:'real', g:'sci', src:'s5'},
+    {n:'台大資工系', c:['en','ma','sc'], t:44, kind:'est', g:'sci', src:'s2'},
+    {n:'清大、交大、成大電機系', c:['en','ma','sc'], t:43, kind:'est', g:'sci', src:'s3'},
+    {n:'台大機械系', c:['en','ma','sc'], t:41, kind:'past', g:'sci', note:'前兩年都是 41 級分', src:'s3'},
+    {n:'台大心理系', c:['en','ma','sc'], t:41, kind:'est', g:'sci', src:'s2'},
+    {n:'中央、中興、中山電機系', c:['en','ma','sc'], t:40, kind:'est', g:'sci', note:'約 40 級分', src:'s4'},
+    {n:'台大法律系財法組', c:['ch','en','mb','so'], t:57, kind:'est', g:'soc', note:'今年數B偏難，可自行少估 1 到 2 級分', src:'s2'},
+    {n:'台大國企系', c:['ch','en','ma','so'], t:55, kind:'est', g:'soc', note:'數學改採數A，英文要穩', src:'s2'},
+    {n:'台大財金系', c:['ch','en','ma'], t:42, kind:'est', g:'soc', src:'s2'},
+    {n:'台大（整體參考）', c:FOUR, t:50, kind:'est', g:'all', note:'用你選的組別四科計算', src:'s4'},
+    {n:'清大、交大、成大（整體參考）', c:FOUR, t:48, kind:'est', g:'all', note:'用你選的組別四科計算', src:'s4'},
+    {n:'中字輩大學（整體參考）', c:FOUR, t:46, kind:'est', g:'all', note:'用你選的組別四科計算', src:'s4'}
+  ];
+  const COMBOS = [['ch','en','ma','sc'], ['ch','en','mb','so'], ['ch','en','ma','so'], ['en','ma','sc'], ['ch','en','ma']];
+  const EXAMPLE = {ch:12, en:12, ma:11, mb:null, so:11, sc:12};
+
+  /* ---------- state ---------- */
+  const state = {scores:{...EXAMPLE}, group:'sci', filter:'all', example:true, view:'score'};
+  const last = {...EXAMPLE, mb:8};
+  try {
+    const saved = JSON.parse(localStorage.getItem('gsat-luodian-v1') || 'null');
+    if (saved && saved.scores) {
+      for (const s of SUBJ) { const v = saved.scores[s.k]; state.scores[s.k] = (v === null || (v >= 0 && v <= 15)) ? v : EXAMPLE[s.k]; }
+      if (saved.group === 'soc') state.group = 'soc';
+      state.example = false;
+    }
+  } catch (e) {}
+  for (const s of SUBJ) if (state.scores[s.k] != null) last[s.k] = state.scores[s.k];
+  state.filter = state.group;
+
+  const save = () => { try { localStorage.setItem('gsat-luodian-v1', JSON.stringify({scores:state.scores, group:state.group})); } catch (e) {} };
+
+  /* ---------- helpers ---------- */
+  const $ = id => document.getElementById(id);
+  const level = (k, v) => { if (v == null) return -1; const a = STD[k]; for (let i = 0; i < 5; i++) if (v >= a[i]) return i; return 5; };
+  const fourOf = g => g === 'soc' ? ['ch','en', state.scores.mb != null ? 'mb' : 'ma', 'so'] : ['ch','en','ma','sc'];
+  const label = c => c.map(k => SN[k].s).join('');
+  const sumOf = c => {
+    const miss = c.filter(k => state.scores[k] == null);
+    if (miss.length) return {miss};
+    return {v: c.reduce((a, k) => a + state.scores[k], 0)};
+  };
+  const tickLeft = v => `calc(15px + (100% - 30px) * ${v / 15})`;
+
+  function countTo(el, val) {
+    cancelAnimationFrame(el._r);
+    if (val == null) { el.textContent = '—'; el._v = 0; return; }
+    const from = el._v || 0; el._v = val;
+    if (reduce || from === val) { el.textContent = val; return; }
+    const t0 = performance.now(), d = 450;
+    const f = t => { const p = Math.min(1, (t - t0) / d), e = 1 - Math.pow(1 - p, 3); el.textContent = Math.round(from + (val - from) * e); if (p < 1) el._r = requestAnimationFrame(f); };
+    el._r = requestAnimationFrame(f);
+  }
+
+  function evaluate(r) {
+    const c = r.c === FOUR ? fourOf(state.group) : r.c;
+    const s = sumOf(c);
+    if (s.miss) return {c, s:'miss', miss:s.miss};
+    const gap = r.t - s.v;
+    return {c, v:s.v, gap, s: gap <= 0 ? 'met' : gap <= 2 ? 'near' : 'far'};
+  }
+  const inGroup = (r, f) => f === 'all' || r.g === 'all' || r.g === f;
+
+  /* ---------- capsule (tab bar + segmented controls) ---------- */
+  class Capsule {
+    constructor(root, onChange, role) {
+      this.root = root; this.onChange = onChange; this.role = role;
+      this.items = [...root.querySelectorAll('.seg-item')];
+      this.cap = root.querySelector('.cap'); this.strip = this.cap.querySelector('.cap-strip');
+      this.clones = this.items.map(it => { const c = document.createElement('span'); c.className = 'cap-clone'; c.innerHTML = it.innerHTML; this.strip.appendChild(c); return c; });
+      this.index = 0; this.x = 0; this.v = 0; this.target = 0; this.press = 0; this.pressTarget = 0; this.raf = 0; this.pid = null; this.dragging = false;
+      this.pos = [];
+      root.addEventListener('pointerdown', e => this.down(e));
+      root.addEventListener('pointermove', e => this.move(e));
+      root.addEventListener('pointerup', e => this.up(e));
+      root.addEventListener('pointercancel', e => this.cancel(e));
+      root.addEventListener('lostpointercapture', e => { if (this.pid === e.pointerId) this.cancel(e); });
+      this.items.forEach((it, i) => it.addEventListener('click', e => { if (e.detail === 0) this.select(i); }));
+      root.addEventListener('keydown', e => {
+        const d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+        if (!d) return; e.preventDefault();
+        const i = Math.max(0, Math.min(this.items.length - 1, this.index + d));
+        this.select(i); this.items[i].focus();
+      });
+      new ResizeObserver(() => this.measure(true)).observe(root);
+    }
+    measure(snap) {
+      if (!this.root.offsetWidth) return;
+      this.pos = this.items.map(it => ({l:it.offsetLeft, w:it.offsetWidth, t:it.offsetTop, h:it.offsetHeight}));
+      this.cw = this.pos[0].w;
+      this.cap.style.width = this.cw + 'px';
+      this.strip.style.width = this.root.offsetWidth + 'px';
+      const ct = this.cap.offsetTop;
+      this.clones.forEach((c, i) => { const p = this.pos[i]; Object.assign(c.style, {left:p.l + 'px', width:p.w + 'px', top:(p.t - ct) + 'px', height:p.h + 'px'}); });
+      if (snap) { this.x = this.target = this.pos[this.index].l; this.v = 0; this.apply(); }
+    }
+    aria() {
+      this.items.forEach((it, i) => {
+        const on = i === this.index;
+        it.setAttribute(this.role === 'tab' ? 'aria-selected' : 'aria-checked', on ? 'true' : 'false');
+        it.tabIndex = on ? 0 : -1;
+      });
+    }
+    set(i, animate = true) {
+      this.index = i; this.aria();
+      if (!this.pos.length) return;
+      this.target = this.pos[i].l;
+      if (!animate || reduce) { this.x = this.target; this.v = 0; this.apply(); } else this.kick();
+    }
+    select(i) { const changed = i !== this.index; this.set(i); if (changed) this.onChange(this.items[i].dataset.v, i); }
+    kick() { if (!this.raf) { this.last = performance.now(); this.raf = requestAnimationFrame(t => this.step(t)); } }
+    step(t) {
+      const dt = Math.min(0.032, (t - this.last) / 1000 || 0.016); this.last = t;
+      const k = this.dragging ? 900 : 380, c = this.dragging ? 55 : 24;
+      this.v += (-k * (this.x - this.target) - c * this.v) * dt;
+      this.x += this.v * dt;
+      this.press += (this.pressTarget - this.press) * Math.min(1, dt * 16);
+      this.apply();
+      if (!this.dragging && Math.abs(this.x - this.target) < 0.3 && Math.abs(this.v) < 6 && Math.abs(this.press - this.pressTarget) < 0.003) {
+        this.x = this.target; this.v = 0; this.press = this.pressTarget; this.apply(); this.raf = 0; return;
+      }
+      this.raf = requestAnimationFrame(tt => this.step(tt));
+    }
+    apply() {
+      if (!this.pos.length) return;
+      const stretch = Math.min(0.24, Math.abs(this.v) / 2400);
+      const s = 1 + this.press * 0.16;
+      this.cap.style.transform = `translateX(${this.x}px) scale(${(s * (1 + stretch)).toFixed(4)},${(s * (1 - stretch * 0.5)).toFixed(4)})`;
+      this.strip.style.transform = `translateX(${-this.x}px)`;
+      const cc = this.x + this.cw / 2;
+      this.items.forEach((it, i) => { const p = this.pos[i]; it.style.opacity = Math.min(1, Math.abs(p.l + p.w / 2 - cc) / (this.cw * 0.85)).toFixed(3); });
+    }
+    localX(e) { const r = this.root.getBoundingClientRect(); const s = r.width / this.root.offsetWidth || 1; return (e.clientX - r.left) / s; }
+    indexAt(x) { let best = 0, d = Infinity; this.pos.forEach((p, i) => { const dd = Math.abs(p.l + p.w / 2 - x); if (dd < d) { d = dd; best = i; } }); return best; }
+    down(e) {
+      if (e.button !== 0 || this.pid !== null || !this.pos.length) return;
+      this.pid = e.pointerId; this.downX = this.localX(e); this.moved = false;
+      const onCap = this.downX >= this.x && this.downX <= this.x + this.cw;
+      this.grab = onCap ? this.downX - this.x : this.cw / 2;
+      this.tapIndex = this.indexAt(this.downX);
+      this.dragging = onCap;
+      this.pressTarget = 1; this.kick();
+      try { this.root.setPointerCapture(e.pointerId); } catch (err) {}
+    }
+    move(e) {
+      if (e.pointerId !== this.pid) return;
+      const lx = this.localX(e);
+      if (!this.moved && Math.abs(lx - this.downX) > 6) { this.moved = true; this.dragging = true; }
+      if (!this.dragging || !this.moved) return;
+      let tx = lx - this.grab;
+      const min = this.pos[0].l, max = this.pos[this.pos.length - 1].l;
+      if (tx < min) tx = min - (min - tx) * 0.25;
+      if (tx > max) tx = max + (tx - max) * 0.25;
+      this.target = tx; this.kick();
+    }
+    up(e) {
+      if (e.pointerId !== this.pid) return;
+      this.pid = null; this.pressTarget = 0;
+      const i = this.moved ? this.indexAt(this.x + this.cw / 2) : this.tapIndex;
+      this.dragging = false; this.select(i); this.kick();
+    }
+    cancel(e) {
+      if (e.pointerId !== this.pid) return;
+      this.pid = null; this.pressTarget = 0; this.dragging = false; this.set(this.index); this.kick();
+    }
+  }
+
+  /* ---------- build subjects ---------- */
+  const subjBox = $('subjects');
+  const rows = {};
+  for (const s of SUBJ) {
+    const row = document.createElement('div');
+    row.className = 'subj';
+    const ticks = STD[s.k].map((v, i) => `<span style="left:${tickLeft(v)}">${STD_SHORT[i]}</span>`).join('');
+    row.innerHTML = `
+      <div class="subj-top">
+        <label class="subj-name" for="r-${s.k}">${s.n}</label>
+        <span class="lvl"></span>
+        <button class="skip" type="button" aria-pressed="false" aria-label="${s.n}未考">未考</button>
+        <output class="subj-val num" for="r-${s.k}"></output>
+      </div>
+      <div class="range-wrap">
+        <input type="range" id="r-${s.k}" min="0" max="15" step="1" aria-label="${s.n}級分">
+        <div class="ticks" aria-hidden="true">${ticks}</div>
+      </div>`;
+    subjBox.appendChild(row);
+    const r = {row, range:row.querySelector('input'), out:row.querySelector('output'), lvl:row.querySelector('.lvl'), skip:row.querySelector('.skip')};
+    rows[s.k] = r;
+    r.range.addEventListener('input', () => {
+      const v = +r.range.value; state.scores[s.k] = v; last[s.k] = v; touched(); update();
+    });
+    r.skip.addEventListener('click', () => {
+      state.scores[s.k] = state.scores[s.k] == null ? (last[s.k] ?? STD[s.k][2]) : null; touched(); update();
+    });
+  }
+  function touched() { if (state.example) { state.example = false; } }
+
+  $('resetBtn').addEventListener('click', () => {
+    Object.assign(state.scores, EXAMPLE); Object.assign(last, EXAMPLE, {mb:8}); state.example = true;
+    try { localStorage.removeItem('gsat-luodian-v1'); } catch (e) {}
+    update(true);
+  });
+
+  /* ---------- render ---------- */
+  function renderSubjects() {
+    for (const s of SUBJ) {
+      const r = rows[s.k], v = state.scores[s.k], off = v == null;
+      r.row.classList.toggle('off', off);
+      r.range.disabled = off;
+      const shown = off ? (last[s.k] ?? 0) : v;
+      r.range.value = shown;
+      r.range.style.setProperty('--fill', tickLeft(shown));
+      r.skip.setAttribute('aria-pressed', off ? 'true' : 'false');
+      r.out.textContent = off ? '—' : v;
+      const l = level(s.k, v);
+      r.lvl.hidden = off;
+      r.lvl.dataset.l = l;
+      r.lvl.textContent = l === 5 ? '低於底標' : l >= 0 ? STD_NAME[l] : '';
+    }
+    $('exampleNote').hidden = !state.example;
+  }
+
+  const comboBox = $('combos');
+  COMBOS.forEach(c => {
+    const t = document.createElement('div'); t.className = 'combo-tile';
+    t.innerHTML = `<span>${label(c)}</span><div class="num"><b class="cv">0</b><small>/${c.length * 15}</small></div>`;
+    t._c = c; comboBox.appendChild(t);
+  });
+  function renderCombos() {
+    const four = label(fourOf(state.group));
+    for (const t of comboBox.children) {
+      const s = sumOf(t._c);
+      countTo(t.querySelector('.cv'), s.miss ? null : s.v);
+      t.classList.toggle('primary', label(t._c) === four);
+    }
+  }
+
+  function renderHero() {
+    const c = fourOf(state.group), s = sumOf(c);
+    countTo($('heroTotal'), s.miss ? null : s.v);
+    $('heroLabel').textContent = `${state.group === 'soc' ? '社會組' : '自然組'}四科 · ${label(c)}`;
+    let met = 0, near = 0, n = 0;
+    for (const r of REFS) { if (!inGroup(r, state.group)) continue; n++; const e = evaluate(r); if (e.s === 'met') met++; else if (e.s === 'near') near++; }
+    $('heroChips').innerHTML = s.miss
+      ? `<span class="mini far">先填完 ${s.miss.map(k => SN[k].n).join('、')}</span>`
+      : `<span class="mini ok">達標 ${met} 個</span><span class="mini near">差一點 ${near} 個</span><span class="mini far">共 ${n} 個參考校系</span>`;
+  }
+
+  function renderResults() {
+    const list = REFS.filter(r => inGroup(r, state.filter)).map(r => ({r, e:evaluate(r)}));
+    const groups = [
+      ['met', '已達標', (a, b) => b.r.t - a.r.t],
+      ['near', '差一點', (a, b) => a.e.gap - b.e.gap],
+      ['far', '還要再拚', (a, b) => a.e.gap - b.e.gap],
+      ['miss', '缺少採計科目', (a, b) => b.r.t - a.r.t]
+    ];
+    let html = '';
+    for (const [key, name, sort] of groups) {
+      const items = list.filter(x => x.e.s === key).sort(sort);
+      if (!items.length) continue;
+      html += `<div class="group-label">${name}<span class="num">${items.length}</span></div>`;
+      for (const {r, e} of items) {
+        const max = e.c.length * 15, lo = max * 0.4;
+        const pct = v => Math.max(0, Math.min(100, (v - lo) / (max - lo) * 100));
+        const kind = KIND[r.kind];
+        const st = key === 'met' ? '達標' : key === 'near' ? `差 ${e.gap}` : key === 'far' ? `差 ${e.gap}` : `缺${e.miss.map(k => SN[k].s).join('')}`;
+        const nums = key === 'miss'
+          ? `<div class="rc-nums"><span>門檻<b class="num">${r.t}</b></span><span>${label(e.c)}要填完才能比</span></div>`
+          : `<div class="bar" aria-hidden="true"><i style="width:${pct(e.v)}%"></i><b style="left:${pct(r.t)}%"></b></div>
+             <div class="rc-nums"><span>門檻<b class="num">${r.t}</b></span><span>你<b class="num">${e.v}</b></span><span class="gap">${e.gap <= 0 ? (e.gap === 0 ? '剛好達標' : `多 ${-e.gap} 級分`) : `還差 ${e.gap} 級分`}</span></div>`;
+        html += `<article class="rc spot" data-s="${key}">
+          <div class="rc-top"><h3>${r.n}</h3><span class="st ${key}">${st}</span></div>
+          <div class="rc-meta"><span class="combo">${label(e.c)}</span><span class="kind ${kind[1]}">${kind[0]}</span></div>
+          ${nums}
+          ${r.note ? `<p class="rc-note">${r.note}</p>` : ''}
+        </article>`;
+      }
+    }
+    $('resCards').innerHTML = html;
+  }
+
+  function renderStd() {
+    let t = `<thead><tr><th>科目</th>${STD_NAME.map(n => `<th>${n}</th>`).join('')}<th>你</th></tr></thead><tbody>`;
+    for (const s of SUBJ) {
+      const v = state.scores[s.k], l = level(s.k, v);
+      t += `<tr><td>${s.n}</td>${STD[s.k].map((x, i) => `<td class="${i === l ? 'hit' : ''}">${x}</td>`).join('')}<td class="you">${v == null ? '—' : v}</td></tr>`;
+    }
+    $('stdTable').innerHTML = t + '</tbody>';
+    let h = '';
+    for (const s of SUBJ) {
+      const v = state.scores[s.k], l = level(s.k, v);
+      const msg = v == null ? '未考' : l === 0 ? '達頂標，約在全國前 12%' : l < 5 ? `${STD_NAME[l]}以上，約在全國前 ${STD_TOP[l]}%` : '低於底標';
+      const ticks = STD[s.k].map((x, i) => `<span class="tk" style="left:${x / 15 * 100}%">${STD_SHORT[i]}</span>`).join('');
+      h += `<div class="std-row spot${v == null ? ' off' : ''}">
+        <div class="std-head"><b>${s.n}</b><span class="num">${v == null ? '—' : v}</span><span class="std-msg">${msg}</span></div>
+        <div class="scale" aria-hidden="true"><div class="scale-track"></div>${ticks}${v == null ? '' : `<span class="mk" style="left:${v / 15 * 100}%"></span>`}</div>
+      </div>`;
+    }
+    $('stdList').innerHTML = h;
+  }
+
+  $('srcList').innerHTML = Object.values(SRC).map(s => `<li><a href="${s.u}" target="_blank" rel="noopener">${s.t}</a> <small>${s.o}，${s.d}</small></li>`).join('');
+
+  function update(skipSave) {
+    renderSubjects(); renderCombos(); renderHero(); renderResults(); renderStd();
+    if (!skipSave && !state.example) save();
+    lensDirty();
+  }
+
+  /* ---------- controls ---------- */
+  const groupSeg = new Capsule($('segGroup'), v => {
+    state.group = v; state.filter = v; filterSeg.set(v === 'soc' ? 2 : 1, false);
+    if (!state.example) save(); update(true);
+  }, 'radio');
+  const filterSeg = new Capsule($('segFilter'), v => { state.filter = v; renderResults(); lensDirty(); }, 'radio');
+  groupSeg.set(state.group === 'soc' ? 1 : 0, false);
+  filterSeg.set(state.filter === 'soc' ? 2 : state.filter === 'sci' ? 1 : 0, false);
+
+  const VIEWS = ['score','result','std','about'];
+  const tabs = new Capsule($('tabbar'), v => showView(v, true), 'tab');
+  function showView(v, animate) {
+    state.view = v;
+    document.querySelectorAll('.view').forEach(sec => {
+      const on = sec.dataset.view === v;
+      sec.hidden = !on;
+      sec.classList.remove('enter');
+      if (on && animate && !reduce) { void sec.offsetWidth; sec.classList.add('enter'); }
+    });
+    window.scrollTo(0, 0);
+    try { history.replaceState(null, '', '#' + v); } catch (e) {}
+    lensDirty();
+  }
+  $('goResult').addEventListener('click', () => tabs.select(1));
+
+  const startView = VIEWS.includes(location.hash.slice(1)) ? location.hash.slice(1) : 'score';
+  tabs.set(VIEWS.indexOf(startView), false);
+  showView(startView, false);
+
+  /* tab bar shrinks while scrolling down */
+  const tabbar = $('tabbar');
+  let lastY = scrollY;
+  addEventListener('scroll', () => {
+    const y = scrollY, d = y - lastY;
+    if (y < 40) tabbar.classList.remove('compact');
+    else if (d > 4) tabbar.classList.add('compact');
+    else if (d < -4) tabbar.classList.remove('compact');
+    lastY = y;
+    if (lensOn) placeLens();
+  }, {passive:true});
+
+  /* spotlight cards */
+  if (matchMedia('(hover: hover)').matches) {
+    document.addEventListener('pointermove', e => {
+      const card = e.target.closest && e.target.closest('.spot');
+      if (!card) return;
+      const r = card.getBoundingClientRect();
+      card.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+      card.style.setProperty('--my', (e.clientY - r.top) + 'px');
+    });
+  }
+
+  /* ---------- draggable refraction lens ---------- */
+  const lens = $('lens'), lensContent = lens.querySelector('.lens-content'), lensBtn = $('lensBtn'), main = $('main');
+  const D = 132, MAG = 1.6;
+  (function buildMap() {
+    const cv = document.createElement('canvas'); cv.width = cv.height = D;
+    const ctx = cv.getContext('2d'), img = ctx.createImageData(D, D), c = D / 2;
+    for (let y = 0; y < D; y++) for (let x = 0; x < D; x++) {
+      const dx = (x + 0.5 - c) / c, dy = (y + 0.5 - c) / c, r = Math.hypot(dx, dy);
+      let f = 0;
+      if (r < 1 && r > 0.55) { const t = (r - 0.55) / 0.45; f = t * t * (3 - 2 * t); }
+      const ux = r ? dx / r : 0, uy = r ? dy / r : 0, i = (y * D + x) * 4;
+      img.data[i] = 128 + ux * f * 127; img.data[i + 1] = 128 + uy * f * 127; img.data[i + 2] = 128; img.data[i + 3] = 255;
+    }
+    ctx.putImageData(img, 0, 0);
+    const url = cv.toDataURL(), fe = $('lensMap');
+    fe.setAttribute('href', url);
+    fe.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', url);
+  })();
+  function buildClone() {
+    if (!lensOn) return;
+    const cl = main.cloneNode(true);
+    cl.removeAttribute('id');
+    cl.querySelectorAll('[id]').forEach(n => n.removeAttribute('id'));
+    cl.querySelectorAll('[for]').forEach(n => n.removeAttribute('for'));
+    cl.querySelectorAll('.enter').forEach(n => n.classList.remove('enter'));
+    const a = main.querySelectorAll('input'), b = cl.querySelectorAll('input');
+    b.forEach((n, i) => { n.value = a[i].value; n.tabIndex = -1; });
+    cl.querySelectorAll('button,a').forEach(n => n.tabIndex = -1);
+    cl.inert = true;
+    cl.style.cssText = `position:absolute;left:0;top:0;margin:0;width:${main.offsetWidth}px;max-width:none;transform-origin:0 0`;
+    lensContent.replaceChildren(cl); cloneEl = cl; placeLens();
+  }
+  function lensDirty() { if (!lensOn) return; clearTimeout(dirtyT); dirtyT = setTimeout(buildClone, 120); }
+  function placeLens() {
+    lens.style.transform = `translate(${lx - D / 2}px,${ly - D / 2}px)`;
+    if (!cloneEl) return;
+    const r = main.getBoundingClientRect();
+    cloneEl.style.transform = `translate(${D / 2 - (lx - r.left) * MAG}px,${D / 2 - (ly - r.top) * MAG}px) scale(${MAG})`;
+  }
+  lensBtn.addEventListener('click', () => {
+    lensOn = !lensOn;
+    lensBtn.setAttribute('aria-pressed', lensOn ? 'true' : 'false');
+    lens.hidden = !lensOn;
+    if (lensOn) { lx = innerWidth / 2; ly = Math.min(innerHeight * 0.42, 360); buildClone(); }
+    else { lensContent.replaceChildren(); cloneEl = null; }
+  });
+  let lp = null, off = [0, 0];
+  lens.addEventListener('pointerdown', e => { lp = e.pointerId; off = [e.clientX - lx, e.clientY - ly]; lens.classList.add('drag'); try { lens.setPointerCapture(lp); } catch (err) {} });
+  lens.addEventListener('pointermove', e => {
+    if (e.pointerId !== lp) return;
+    lx = Math.max(D / 3, Math.min(innerWidth - D / 3, e.clientX - off[0]));
+    ly = Math.max(D / 3, Math.min(innerHeight - D / 3, e.clientY - off[1]));
+    placeLens();
+  });
+  const lensUp = e => { if (e.pointerId !== lp) return; lp = null; lens.classList.remove('drag'); };
+  lens.addEventListener('pointerup', lensUp); lens.addEventListener('pointercancel', lensUp);
+  addEventListener('resize', () => { if (lensOn) buildClone(); });
+
+  update(true);
+})();
+</script>
+</body>
+</html>
